@@ -1,0 +1,24 @@
+# Compiled Java class binaries & build folders
+out/
+bin/
+target/
+*.class
+
+# Build argument cache
+sources.txt
+
+# Test sandbox files
+data/test_sandbox/
+
+# Operating System & IDE artifacts
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.DS_Store
+Thumbs.db
+
+# Local environment shims
+powershell.bat

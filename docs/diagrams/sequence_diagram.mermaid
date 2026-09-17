@@ -1,0 +1,49 @@
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Receptionist as Front Desk User
+    participant Menu as ReceptionistMenu
+    participant ApptService as AppointmentService
+    participant PatService as PatientService
+    participant DocService as DoctorService
+    participant ApptRepo as AppointmentRepository
+    participant BillService as BillingService
+    participant BillRepo as BillRepository
+    participant Audit as AuditService
+
+    Receptionist ->> Menu: Select 'Book Appointment' (PatientId, DoctorId, Date, Time)
+    activate Menu
+    Menu ->> ApptService: bookAppointment(patientId, doctorId, date, time, reason, actor)
+    activate ApptService
+
+    ApptService ->> PatService: getPatientById(patientId)
+    PatService -->> ApptService: Patient entity (active)
+
+    ApptService ->> DocService: getDoctorById(doctorId)
+    DocService -->> ApptService: Doctor entity (status=ACTIVE, clinic hours)
+
+    ApptService ->> ApptRepo: findDoctorConflict(doctorId, date, time)
+    ApptRepo -->> ApptService: Optional.empty (slot available)
+
+    ApptService ->> ApptRepo: findPatientConflict(patientId, date, time)
+    ApptRepo -->> ApptService: Optional.empty (no clash)
+
+    ApptService ->> ApptRepo: save(new Appointment(APT-3003, ...))
+    ApptRepo -->> ApptService: Saved Appointment
+    ApptService ->> Audit: log("APPOINTMENT", "BOOK", actor, "Details")
+    ApptService -->> Menu: Appointment Created (APT-3003)
+    deactivate ApptService
+    Menu -->> Receptionist: [SUCCESS] Appointment APT-3003 Booked
+
+    Receptionist ->> Menu: Select 'Generate Bill' (APT-3003, items, discount, tax)
+    Menu ->> BillService: generateBill(APT-3003, patientId, fee, services, meds, room, disc, tax, actor)
+    activate BillService
+    BillService ->> BillService: calculate(subtotal, taxAmount, finalAmount, balance)
+    BillService ->> BillRepo: save(new Bill(BIL-4003, ...))
+    BillRepo -->> BillService: Saved Bill
+    BillService ->> Audit: log("BILLING", "GENERATE", actor, "Invoice details")
+    BillService -->> Menu: Bill Created (BIL-4003, Final: INR 1575.00)
+    deactivate BillService
+    Menu -->> Receptionist: Display Invoice Details
+    deactivate Menu
+```

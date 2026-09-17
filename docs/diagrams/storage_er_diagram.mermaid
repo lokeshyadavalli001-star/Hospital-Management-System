@@ -1,0 +1,92 @@
+```mermaid
+erDiagram
+    USERS_CSV {
+        string id PK "e.g. USR-5001"
+        string username UK "Unique system handle"
+        string passwordHash "Salted SHA-256 hash"
+        string salt "Hex-encoded cryptographic salt"
+        string fullName "Staff legal name"
+        string email "Contact email"
+        string phone "Phone digits"
+        string role "ADMIN / RECEPTIONIST / DOCTOR / PATIENT"
+        boolean active "Account active flag"
+        string createdAt "Timestamp"
+        string extra1 "DeptAccess or Shift or Specialization"
+        string extra2 "DeskNumber or Dept"
+    }
+
+    PATIENTS_CSV {
+        string id PK "e.g. PAT-1001"
+        string name "Patient legal name"
+        int age "Patient age"
+        string gender "MALE / FEMALE / OTHER"
+        string phone UK "Patient phone number"
+        string email "Contact email"
+        string address "Residential address"
+        string bloodGroup "A+, B+, O+, AB+, etc."
+        string emergencyContact "Emergency phone"
+        string registrationDate "YYYY-MM-DD"
+        boolean active "Active flag"
+    }
+
+    DOCTORS_CSV {
+        string id PK "e.g. DOC-2001 (links to USERS_CSV)"
+        string username "Doctor user account handle"
+        string passwordHash "Hashed credentials"
+        string salt "Salt"
+        string fullName "Dr. First Last"
+        string email "Doctor email"
+        string phone "Doctor mobile"
+        boolean active "Active flag"
+        string createdAt "Creation datetime"
+        string specialization "e.g. Cardiology"
+        string department "e.g. Cardiology"
+        double consultationFee "Consultation charge"
+        string status "ACTIVE / ON_LEAVE / INACTIVE"
+        string availableFrom "HH:mm"
+        string availableTo "HH:mm"
+        string qualification "Degrees & credentials"
+    }
+
+    APPOINTMENTS_CSV {
+        string id PK "e.g. APT-3001"
+        string patientId FK "References PATIENTS_CSV(id)"
+        string doctorId FK "References DOCTORS_CSV(id)"
+        string appointmentDate "YYYY-MM-DD"
+        string appointmentTime "HH:mm"
+        string reason "Chief complaint / symptoms"
+        string status "SCHEDULED / COMPLETED / CANCELLED / RESCHEDULED"
+        string consultationNotes "Diagnosis & prescription remarks"
+        string createdAt "Timestamp"
+    }
+
+    BILLS_CSV {
+        string id PK "e.g. BIL-4001"
+        string appointmentId FK "References APPOINTMENTS_CSV(id) or N/A"
+        string patientId FK "References PATIENTS_CSV(id)"
+        double consultationFee "Base consultation charge"
+        double serviceCharges "Labs & diagnostic imaging"
+        double medicineCharges "Pharmacy disbursement"
+        double roomCharges "Bed/room fees"
+        double discountAmount "Concession deduction"
+        double taxRate "GST/Tax percentage"
+        double paidAmount "Cumulative cash received"
+        string paymentStatus "PENDING / PARTIAL / PAID"
+        string billingDate "YYYY-MM-DD"
+        string paidDate "YYYY-MM-DD or null"
+    }
+
+    AUDIT_LOG {
+        string timestamp "YYYY-MM-DD HH:mm:ss"
+        string category "AUTH / PATIENT / DOCTOR / APPOINTMENT / BILLING"
+        string action "LOGIN / REGISTER / BOOK / PAYMENT"
+        string actor "Actor username"
+        string details "Transaction details"
+    }
+
+    PATIENTS_CSV ||--o{ APPOINTMENTS_CSV : "books"
+    DOCTORS_CSV ||--o{ APPOINTMENTS_CSV : "conducts"
+    PATIENTS_CSV ||--o{ BILLS_CSV : "invoiced_to"
+    APPOINTMENTS_CSV ||--o| BILLS_CSV : "bills_for"
+    USERS_CSV ||--o| DOCTORS_CSV : "synchronizes_credentials"
+```

@@ -1,0 +1,89 @@
+```mermaid
+graph TD
+    subgraph Client_Presentation_Layer ["Presentation Layer (CLI / Terminal UI)"]
+        UI_Main["Main (Bootstrap & Router)"]
+        UI_Admin["AdminMenu"]
+        UI_Recep["ReceptionistMenu"]
+        UI_Doc["DoctorMenu"]
+        UI_Pat["PatientMenu"]
+        UI_Util["ConsoleUtil & ASCII Table Renderer"]
+    end
+
+    subgraph Service_Business_Layer ["Service Layer (Business Logic & Validation)"]
+        S_User["UserService (Auth, RBAC, Passwords)"]
+        S_Patient["PatientService (Demographics, CRUD)"]
+        S_Doctor["DoctorService (Profiles, Clinic Hours)"]
+        S_Appt["AppointmentService (Slot Conflict Engine)"]
+        S_Bill["BillingService (Invoicing, Partial Payments)"]
+        S_Report["ReportService (Aggregations & Analytics)"]
+        S_Audit["AuditService (Transaction Trail)"]
+    end
+
+    subgraph Domain_Model_Layer ["Domain Model Layer (Entities & OOP Hierarchy)"]
+        M_User["User (Abstract Base)"]
+        M_Admin["Admin"]
+        M_Recep["Receptionist"]
+        M_Doctor["Doctor"]
+        M_Patient["Patient"]
+        M_Appt["Appointment"]
+        M_Bill["Bill"]
+        M_Enums["Enums (UserRole, Gender, AppointmentStatus, PaymentStatus, DoctorStatus)"]
+    end
+
+    subgraph Repository_Persistence_Layer ["Repository Layer (File Persistence & DAO)"]
+        R_Repo["Repository<T> (Generic Interface)"]
+        R_AbsCsv["AbstractCsvRepository<T> (Generic File-IO)"]
+        R_User["UserRepository"]
+        R_Patient["PatientRepository"]
+        R_Doctor["DoctorRepository"]
+        R_Appt["AppointmentRepository"]
+        R_Bill["BillRepository"]
+    end
+
+    subgraph Physical_Storage ["File-Based Storage (data/)"]
+        F_Users[("users.csv")]
+        F_Patients[("patients.csv")]
+        F_Doctors[("doctors.csv")]
+        F_Appts[("appointments.csv")]
+        F_Bills[("bills.csv")]
+        F_Audit[("audit.log")]
+    end
+
+    %% Presentation to Services
+    UI_Main --> S_User
+    UI_Admin --> S_Patient & S_Doctor & S_Appt & S_Bill & S_User & S_Report & S_Audit
+    UI_Recep --> S_Patient & S_Doctor & S_Appt & S_Bill
+    UI_Doc --> S_Appt & S_Patient & S_Doctor
+    UI_Pat --> S_Patient & S_Appt & S_Bill
+
+    %% Services to Domain Model
+    S_User -.-> M_User & M_Admin & M_Recep & M_Doctor
+    S_Patient -.-> M_Patient
+    S_Doctor -.-> M_Doctor
+    S_Appt -.-> M_Appt
+    S_Bill -.-> M_Bill
+
+    %% Services to Repositories
+    S_User --> R_User
+    S_Patient --> R_Patient
+    S_Doctor --> R_Doctor
+    S_Appt --> R_Appt
+    S_Bill --> R_Bill
+    S_Report --> S_Patient & S_Doctor & S_Appt & S_Bill
+
+    %% Repositories inheritance
+    R_AbsCsv -.->|implements| R_Repo
+    R_User --|> R_AbsCsv
+    R_Patient --|> R_AbsCsv
+    R_Doctor --|> R_AbsCsv
+    R_Appt --|> R_AbsCsv
+    R_Bill --|> R_AbsCsv
+
+    %% Repositories to Storage Files
+    R_User --> F_Users
+    R_Patient --> F_Patients
+    R_Doctor --> F_Doctors
+    R_Appt --> F_Appts
+    R_Bill --> F_Bills
+    S_Audit --> F_Audit
+```

@@ -1,0 +1,4 @@
+id,username,passwordHash,salt,fullName,email,phone,active,createdAt,specialization,department,consultationFee,status,availableFrom,availableTo,qualification
+DOC-2001,dr_sharma,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Priya Sharma,dr.sharma@cityhospital.example.com,9876543212,true,2026-06-19 19:25:18,Cardiology,Cardiology,800.0,ACTIVE,09:00,15:00,"MD, DM (Cardiology)"
+DOC-2002,dr_verma,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Arun Verma,dr.verma@cityhospital.example.com,9876543213,true,2026-06-29 19:25:18,Neurology,Neurology,1000.0,ACTIVE,10:00,16:00,"MS, MCh (Neurosurgery)"
+DOC-2003,dr_kapoor,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Neha Kapoor,dr.kapoor@cityhospital.example.com,9876543214,true,2026-07-19 19:25:18,Orthopedics,Orthopedics,600.0,ACTIVE,11:00,18:00,"MS (Ortho), Fellowship Joint Replacement"

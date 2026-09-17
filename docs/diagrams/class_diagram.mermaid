@@ -1,0 +1,159 @@
+```mermaid
+classDiagram
+    %% Interfaces
+    class Identifiable {
+        <<interface>>
+        +getId() String
+    }
+
+    class Searchable {
+        <<interface>>
+        +matches(query: String) boolean
+    }
+
+    class Repository~T~ {
+        <<interface>>
+        +findById(id: String) Optional~T~
+        +findAll() List~T~
+        +save(entity: T) T
+        +deleteById(id: String) boolean
+        +existsById(id: String) boolean
+        +count() int
+        +search(query: String) List~T~
+        +reload() void
+    }
+
+    %% Domain Entities
+    class User {
+        <<abstract>>
+        -id: String
+        -username: String
+        -passwordHash: String
+        -salt: String
+        -fullName: String
+        -email: String
+        -phone: String
+        -role: UserRole
+        -active: boolean
+        -createdAt: LocalDateTime
+        +getRoleDescription()* String
+        +matches(query: String) boolean
+    }
+
+    class Admin {
+        -departmentAccess: String
+        +getRoleDescription() String
+    }
+
+    class Receptionist {
+        -shift: String
+        -deskNumber: String
+        +getRoleDescription() String
+    }
+
+    class Doctor {
+        -specialization: String
+        -department: String
+        -consultationFee: double
+        -status: DoctorStatus
+        -availableFrom: LocalTime
+        -availableTo: LocalTime
+        -qualification: String
+        +isAvailableAt(time: LocalTime) boolean
+        +getRoleDescription() String
+    }
+
+    class Patient {
+        -id: String
+        -name: String
+        -age: int
+        -gender: Gender
+        -phone: String
+        -email: String
+        -address: String
+        -bloodGroup: String
+        -emergencyContact: String
+        -registrationDate: LocalDate
+        -active: boolean
+        +matches(query: String) boolean
+    }
+
+    class Appointment {
+        -id: String
+        -patientId: String
+        -doctorId: String
+        -appointmentDate: LocalDate
+        -appointmentTime: LocalTime
+        -reason: String
+        -status: AppointmentStatus
+        -consultationNotes: String
+        -createdAt: LocalDateTime
+        +matches(query: String) boolean
+    }
+
+    class Bill {
+        -id: String
+        -appointmentId: String
+        -patientId: String
+        -consultationFee: double
+        -serviceCharges: double
+        -medicineCharges: double
+        -roomCharges: double
+        -discountAmount: double
+        -taxRate: double
+        -subtotal: double
+        -taxAmount: double
+        -finalAmount: double
+        -paidAmount: double
+        -balanceAmount: double
+        -paymentStatus: PaymentStatus
+        -billingDate: LocalDate
+        -paidDate: LocalDate
+        +recalculate() void
+        +addPayment(amount: double) void
+        +matches(query: String) boolean
+    }
+
+    %% Persistence Layer
+    class AbstractCsvRepository~T~ {
+        <<abstract>>
+        #filePath: String
+        #cache: Map~String, T~
+        #getCsvHeader()* String
+        #serialize(entity: T)* String
+        #deserialize(tokens: List~String~)* T
+        +save(entity: T) T
+        +findById(id: String) Optional~T~
+        +findAll() List~T~
+        +deleteById(id: String) boolean
+    }
+
+    class PatientRepository
+    class DoctorRepository
+    class AppointmentRepository
+    class BillRepository
+    class UserRepository
+
+    %% Inheritances & Implementations
+    User ..|> Identifiable
+    User ..|> Searchable
+    Admin --|> User
+    Receptionist --|> User
+    Doctor --|> User
+
+    Patient ..|> Identifiable
+    Patient ..|> Searchable
+
+    Appointment ..|> Identifiable
+    Appointment ..|> Searchable
+
+    Bill ..|> Identifiable
+    Bill ..|> Searchable
+
+    AbstractCsvRepository ..|> Repository
+    PatientRepository --|> AbstractCsvRepository
+    DoctorRepository --|> AbstractCsvRepository
+    AppointmentRepository --|> AbstractCsvRepository
+    BillRepository --|> AbstractCsvRepository
+    UserRepository --|> AbstractCsvRepository
+```

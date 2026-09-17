@@ -1,0 +1,8 @@
+# HMS Audit Log Started: 2026-09-17T19:25:18.334393500
+[2026-09-17 19:25:18] [SYSTEM] [STARTUP] by [SYSTEM] - Hospital Management System initialized successfully.
+[2026-09-17 19:25:18] [SYSTEM] [SHUTDOWN] by [SYSTEM] - Application shut down by user.
+[2026-09-17 19:25:35] [SYSTEM] [STARTUP] by [SYSTEM] - Hospital Management System initialized successfully.
+[2026-09-17 19:25:35] [AUTH] [LOGIN_SUCCESS] by [admin] - Role: ADMIN
+[2026-09-17 19:26:05] [SYSTEM] [STARTUP] by [SYSTEM] - Hospital Management System initialized successfully.
+[2026-09-17 19:26:05] [AUTH] [LOGIN_SUCCESS] by [admin] - Role: ADMIN
+[2026-09-17 19:26:05] [SYSTEM] [SHUTDOWN] by [SYSTEM] - Application shut down by user.

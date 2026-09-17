@@ -1,0 +1,7 @@
+id,username,passwordHash,salt,fullName,email,phone,role,active,createdAt,extra1,extra2
+USR-5001,admin,f528bb1f33cc91711c6e9c861cbb71fa0e3ae1f6948fae468c5095080a36f57d,c3d9c0947352ddad,Dr. Rajesh Mehta,admin@cityhospital.example.com,9876543210,ADMIN,true,2026-07-19 19:25:18,ALL_DEPARTMENTS,
+USR-5002,recep,d40e22d928e14238b2e4541df09e5ce6895326d4d2577274e11058a9e5f15e5d,c3d9c0947352ddad,Ananya Sen,ananya@cityhospital.example.com,9876543211,RECEPTIONIST,true,2026-08-03 19:25:18,MORNING,DESK-101
+USR-5003,pat_rahul,17938b00193f7ec0cc303edf0e0c14061caaeb2839a75ed3401773558793825e,c3d9c0947352ddad,Rahul Verma,rahul.verma@example.com,9876543220,PATIENT,true,2026-08-18 19:25:18,PATIENT_VIEW,
+DOC-2001,dr_sharma,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Priya Sharma,dr.sharma@cityhospital.example.com,9876543212,DOCTOR,true,2026-06-19 19:25:18,Cardiology,Cardiology
+DOC-2002,dr_verma,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Arun Verma,dr.verma@cityhospital.example.com,9876543213,DOCTOR,true,2026-06-29 19:25:18,Neurology,Neurology
+DOC-2003,dr_kapoor,7c8bdbbb550a8d3469294e6ff64e20b12ffb033d7188955c57e5024b9b37bae4,5d276e3e59b0a2b4,Neha Kapoor,dr.kapoor@cityhospital.example.com,9876543214,DOCTOR,true,2026-07-19 19:25:18,Orthopedics,Orthopedics

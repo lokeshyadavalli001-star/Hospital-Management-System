@@ -1,0 +1,43 @@
+```mermaid
+flowchart TD
+    Start([Patient Arrival at Hospital]) --> CheckReg{Registered in System?}
+
+    CheckReg -- No --> RegisterPatient[Receptionist Enters Demographics<br/>- Name, Age, Phone, Blood Group<br/>- InputValidator Checks]
+    RegisterPatient --> CreatePatientRecord[Patient Record Saved<br/>Assigned PAT-ID]
+    CheckReg -- Yes --> SearchPatient[Receptionist Searches by Phone/Name/ID]
+
+    CreatePatientRecord --> SelectDoctor[Select Consultant Doctor & Department]
+    SearchPatient --> SelectDoctor
+
+    SelectDoctor --> CheckDoctorStatus{Doctor Status Active?}
+    CheckDoctorStatus -- No / On Leave --> PickAlternateDoctor[Select Alternate Consultant]
+    PickAlternateDoctor --> SelectDoctor
+
+    CheckDoctorStatus -- Yes --> SlotSelection[Select Appointment Date & Time]
+    SlotSelection --> ConflictCheck{Slot Clashing with Doctor or Patient?}
+    ConflictCheck -- Yes --> SlotConflict[Prompt User to Pick Different Slot]
+    SlotConflict --> SlotSelection
+
+    ConflictCheck -- No --> ConfirmBooking[Appointment Booked<br/>Status: SCHEDULED<br/>Audit Log Updated]
+
+    ConfirmBooking --> Consultation[Doctor Consultation Session]
+    Consultation --> DoctorActions{Consultation Completed?}
+    DoctorActions -- Reschedule Requested --> RescheduleAppt[Reschedule to Future Slot<br/>Status: RESCHEDULED]
+    DoctorActions -- Patient Cancelled --> CancelAppt[Cancel Appointment<br/>Status: CANCELLED]
+    DoctorActions -- Successful Visit --> CompleteAppt[Enter Clinical & Rx Notes<br/>Status: COMPLETED]
+
+    CompleteAppt --> BillingIntake[Billing Desk Invoicing]
+    BillingIntake --> ComputeBill[Compute Breakdown<br/>- Consultation + Services + Meds<br/>- Apply Discount & Tax<br/>- Calculate Final Net Amount]
+
+    ComputeBill --> PaymentProcess{Payment Made?}
+    PaymentProcess -- Full Settlement --> SettleFull[Record Payment<br/>Status: PAID<br/>Balance: 0.00]
+    PaymentProcess -- Partial Payment --> SettlePartial[Record Payment<br/>Status: PARTIAL<br/>Remaining Balance Due]
+    PaymentProcess -- Pending / Credit --> SettlePending[Status: PENDING<br/>Due in Full]
+
+    SettleFull --> PrintInvoice[Generate Printed ASCII Receipt]
+    SettlePartial --> PrintInvoice
+    SettlePending --> PrintInvoice
+
+    PrintInvoice --> UpdateReports[Update Hospital Daily Revenue & Department Metrics]
+    UpdateReports --> End([End of Outpatient Flow])
+```

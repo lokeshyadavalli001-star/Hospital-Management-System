@@ -1,0 +1,78 @@
+```mermaid
+flowchart LR
+    %% Actors
+    Admin((Administrator))
+    Recep((Receptionist))
+    Doc((Doctor))
+    Pat((Patient))
+
+    %% Subgraph System Boundary
+    subgraph HMS_System ["Hospital Management System Boundary"]
+        UC1(["Authenticate / Sign In"])
+        UC2(["Manage System Users & Roles"])
+        UC3(["View Security Audit Logs"])
+        UC4(["Generate Executive Reports & CSV Export"])
+        
+        UC5(["Register New Patient"])
+        UC6(["Search & Update Patient Records"])
+        UC7(["Deactivate Patient Account"])
+        
+        UC8(["Manage Doctor Directory & Clinic Hours"])
+        UC9(["Toggle Doctor Availability"])
+        
+        UC10(["Book Outpatient Appointment"])
+        UC11(["Reschedule Appointment"])
+        UC12(["Cancel Appointment"])
+        UC13(["Detect Slot Conflicts"])
+        
+        UC14(["Generate Itemized Bill"])
+        UC15(["Record Full / Partial Payment"])
+        UC16(["Print ASCII Invoice Receipt"])
+        
+        UC17(["Review Assigned Appointments"])
+        UC18(["Complete Visit & Save Consultation Notes"])
+        UC19(["Inspect Patient Medical Profile"])
+        
+        UC20(["View Personal Appointments"])
+        UC21(["View Personal Billing History"])
+    end
+
+    %% Actor Connections
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC14
+
+    Recep --> UC1
+    Recep --> UC5
+    Recep --> UC6
+    Recep --> UC10
+    Recep --> UC11
+    Recep --> UC12
+    Recep --> UC14
+    Recep --> UC15
+    Recep --> UC16
+
+    Doc --> UC1
+    Doc --> UC9
+    Doc --> UC17
+    Doc --> UC18
+    Doc --> UC19
+
+    Pat --> UC1
+    Pat --> UC20
+    Pat --> UC21
+    Pat --> UC16
+
+    %% Relationships
+    UC10 -.->|<<includes>>| UC13
+    UC11 -.->|<<includes>>| UC13
+    UC15 -.->|<<updates>>| UC14
+```
