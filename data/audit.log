@@ -6,3 +6,4 @@
 [2026-09-17 19:26:05] [SYSTEM] [STARTUP] by [SYSTEM] - Hospital Management System initialized successfully.
 [2026-09-17 19:26:05] [AUTH] [LOGIN_SUCCESS] by [admin] - Role: ADMIN
 [2026-09-17 19:26:05] [SYSTEM] [SHUTDOWN] by [SYSTEM] - Application shut down by user.
+[2026-09-17 19:35:53] [PATIENT] [REGISTER] by [LOCALHOST_WEB] - Registered patient PAT-1004 (Divya Sharma)

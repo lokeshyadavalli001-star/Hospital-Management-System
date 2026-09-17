@@ -22,6 +22,7 @@ import com.hms.service.ReportService;
 import com.hms.service.UserService;
 import com.hms.ui.AdminMenu;
 import com.hms.ui.DoctorMenu;
+import com.hms.ui.LocalHostServer;
 import com.hms.ui.PatientMenu;
 import com.hms.ui.ReceptionistMenu;
 import com.hms.util.ConsoleUtil;
@@ -76,10 +77,11 @@ public class Main {
             System.out.println(" 1. Sign In / Authenticate");
             System.out.println(" 2. View Demo Login Credentials");
             System.out.println(" 3. Hospital Information & Contacts");
-            System.out.println(" 4. Exit Application");
+            System.out.println(" 4. Launch Localhost Web Dashboard (http://localhost:8080)");
+            System.out.println(" 5. Exit Application");
             System.out.println();
 
-            int choice = ConsoleUtil.promptInt(scanner, "Enter selection", 1, 4);
+            int choice = ConsoleUtil.promptInt(scanner, "Enter selection", 1, 5);
             switch (choice) {
                 case 1:
                     login(scanner, userService, patientService, doctorService,
@@ -92,6 +94,9 @@ public class Main {
                     showHospitalInfo(scanner);
                     break;
                 case 4:
+                    launchWebDashboard(patientService, doctorService, appointmentService, billingService, reportService, auditService, scanner);
+                    break;
+                case 5:
                     ConsoleUtil.printInfo("Terminating session. Thank you for using City General HMS.");
                     auditService.log("SYSTEM", "SHUTDOWN", "SYSTEM", "Application shut down by user.");
                     running = false;
@@ -99,6 +104,21 @@ public class Main {
             }
         }
         scanner.close();
+    }
+
+    private static void launchWebDashboard(PatientService patientService, DoctorService doctorService,
+                                           AppointmentService appointmentService, BillingService billingService,
+                                           ReportService reportService, AuditService auditService, Scanner scanner) {
+        try {
+            LocalHostServer webServer = new LocalHostServer(patientService, doctorService, appointmentService, billingService, reportService, auditService);
+            webServer.start();
+            System.out.println("[INFO] Server is running in background on http://localhost:8080");
+            System.out.println("[INFO] Open your web browser and navigate to http://localhost:8080");
+            ConsoleUtil.pause(scanner);
+        } catch (Exception e) {
+            ConsoleUtil.printError("Could not start localhost server: " + e.getMessage());
+            ConsoleUtil.pause(scanner);
+        }
     }
 
     private static void login(Scanner scanner, UserService userService, PatientService patientService,
